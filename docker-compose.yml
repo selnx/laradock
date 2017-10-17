@@ -103,6 +103,30 @@ services:
       networks:
         - backend
 
+### NODEJS Container #######################################
+
+    nodejs:
+      build:
+        context: ./nodejs
+        args:
+            - INSTALL_NODE=${NODEJS_NODE_VERSION}
+            - INSTALL_YARN=${NODEJS_YARN_VERSION}
+      volumes_from:
+        - applications
+      volumes:
+        - ./php-fpm/php${PHP_VERSION}.ini:/usr/local/etc/php/php.ini
+      expose:
+        - "7001"
+      depends_on:
+        - workspace
+      extra_hosts:
+        - "dockerhost:${DOCKER_HOST_IP}"
+      environment:
+        - PHP_IDE_CONFIG=${PHP_IDE_CONFIG}
+      networks:
+        - frontend
+        - backend
+
 ### PHP Worker Container #####################################
 
     php-worker:
